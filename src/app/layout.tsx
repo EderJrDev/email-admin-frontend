@@ -1,7 +1,9 @@
-import Navbar from "@/components/Navbar";
+import React from "react";
 import Container from "@/components/Container";
 import "./globals.css";
 import Footer from "@/components/Footer";
+import Sidebar from "@/components/sidebar";
+import NavbarContent from "./nav-content";
 
 export const metadata = {
   title: "Create Next App",
@@ -16,11 +18,31 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Container>
-          <Navbar />
-          <>{children}</>
-          <Footer />
-        </Container>
+        <div className="flex h-screen">
+          {/* Menu lateral à esquerda */}
+          <div className="flex-none w-64 bg-gray-200">
+            {/* Conteúdo do menu */}
+            <Sidebar />
+          </div>
+
+          <div className="flex flex-col flex-1">
+            {/* Cabeçalho */}
+            <header>
+              <NavbarContent />
+              {/* <Navbar /> */}
+            </header>
+
+            {/* Conteúdo */}
+            <main className="flex-1 p-4 overflow-y-auto">
+              <Container>{children}</Container>
+            </main>
+
+            {/* Rodapé */}
+            <footer>
+              <Footer />
+            </footer>
+          </div>
+        </div>
       </body>
     </html>
   );
