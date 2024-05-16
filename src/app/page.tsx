@@ -2,6 +2,8 @@ import { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 
+import SignIn from "./auth/signin/page";
+
 export const metadata: Metadata = {
   title:
     "Next.js E-commerce Dashboard | TailAdmin - Next.js Dashboard Template",
@@ -11,7 +13,8 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
-      <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+      <SignIn />
+      {/* <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="flex flex-wrap items-center">
           <div className="hidden w-full xl:block xl:w-1/2">
             <div className="px-26 py-17.5 text-center">
@@ -294,7 +297,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 }
