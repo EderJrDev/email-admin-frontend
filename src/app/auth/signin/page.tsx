@@ -1,37 +1,19 @@
 "use client";
 import React from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 import Link from "next/link";
 import Image from "next/image";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-interface IFormInput {
-  email: string;
-  password: string;
-}
+import { IFormInput } from "./models/signin.model";
+import { createOnSubmitHandler } from "./services/onSubmit.services";
 
 const SignIn: React.FC = () => {
   const { register, handleSubmit } = useForm<IFormInput>();
-
   const router = useRouter();
 
-  const onSubmit: SubmitHandler<IFormInput> = async ({ email, password }) => {
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
-    // console.log(result);
-    if (result?.error) {
-      console.log(result);
-      return;
-    }
-
-    router.replace("/dashboard");
-  };
-
+  const onSubmit = createOnSubmitHandler(router.replace);
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="flex flex-wrap items-center">
@@ -234,7 +216,7 @@ const SignIn: React.FC = () => {
                     {...register("password")}
                     required
                     placeholder="6+ Characters, 1  Capital letter"
-                    className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-white outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   />
 
                   <span className="absolute right-4 top-4">

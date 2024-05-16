@@ -30,9 +30,7 @@ const nextAuthOptions: NextAuthOptions = {
         if (user && response.ok) {
           return user;
         }
-        // if (user.length > 0 && user.password === credentials?.password) {
-        //   return user;
-        // }
+
         return null;
       },
     }),

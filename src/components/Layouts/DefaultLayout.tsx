@@ -1,7 +1,9 @@
 "use client";
-import React, { useState, ReactNode } from "react";
+import React, { useState, ReactNode, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function DefaultLayout({
   children,
@@ -9,6 +11,26 @@ export default function DefaultLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === "loading") return; // Esperando para saber o status da sessão
+
+    if (!session) {
+      router.replace("/");
+    }
+  }, [session, status, router]);
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
+  if (!session) {
+    return null; // Opcional: ou você pode mostrar um estado de carregamento até redirecionar
+  }
+
   return (
     <>
       {/* <!-- ===== Page Wrapper Start ===== --> */}
