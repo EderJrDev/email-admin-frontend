@@ -10,6 +10,7 @@ import { Theme } from "@radix-ui/themes";
 
 import Loader from "@/components/common/Loader";
 import NextAuthSessionProvider from "@/providers/sessionProvider";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export default function RootLayout({
   children,
@@ -22,14 +23,18 @@ export default function RootLayout({
     setTimeout(() => setLoading(false), 1000);
   }, []);
 
+  const queryClient = new QueryClient();
+
   return (
     <html lang="en">
       <body suppressHydrationWarning={true}>
         <div className="dark:bg-boxdark-2 dark:text-bodydark">
           <Theme>
-            <NextAuthSessionProvider>
-              {loading ? <Loader /> : children}
-            </NextAuthSessionProvider>
+            <QueryClientProvider client={queryClient}>
+              <NextAuthSessionProvider>
+                {loading ? <Loader /> : children}
+              </NextAuthSessionProvider>
+            </QueryClientProvider>
           </Theme>
         </div>
       </body>

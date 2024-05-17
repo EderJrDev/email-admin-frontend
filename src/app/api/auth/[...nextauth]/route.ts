@@ -12,7 +12,7 @@ const nextAuthOptions: NextAuthOptions = {
 
       async authorize(credentials, req) {
         const response = await fetch(
-          "https://oficina-backend.vercel.app/user/login",
+          "https://nestjs-backend-livid.vercel.app/auth/login",
           {
             method: "POST",
             headers: {
@@ -25,19 +25,36 @@ const nextAuthOptions: NextAuthOptions = {
           },
         );
 
-        const user = await response.json();
-
-        if (user && response.ok) {
-          return user;
+        const data = await response.json();
+        console.log("dataa", data);
+        if (response.ok && data.token) {
+          return data;
         }
 
         return null;
       },
     }),
   ],
+
   pages: {
     signIn: "/",
   },
+  // callbacks: {
+  //   async jwt({ token, user }) {
+  //     // Add the token to the jwt object if available
+  //     if (user) {
+  //       token.accessToken = user.accessToken; // Adjust this based on your token structure
+  //     }
+  //     return token;
+  //   },
+  //   async session({ session, token }) {
+  //     // Add the token to the session object
+  //     if (token) {
+  //       session.accessToken = token.accessToken;
+  //     }
+  //     return session;
+  //   },
+  // },
 };
 
 const handler = NextAuth(nextAuthOptions);
