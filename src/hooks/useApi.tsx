@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-// import { useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 interface FetchDataOptions {
   url: string;
@@ -14,49 +14,35 @@ interface UseApiResponse {
   fetchData: (options: FetchDataOptions) => Promise<any>;
 }
 
+interface ExtendedSession {
+  accessToken?: string;
+}
+
 export function useApi(): UseApiResponse {
   const [loading, setLoading] = useState<boolean>(false);
+  const { data: session } = useSession();
+  console.log(session);
 
   const axiosInstance = axios.create({
-    httpAgent: false,
-    baseURL: "https://nestjs-backend-livid.vercel.app/",
-    // baseURL: "http://localhost:3000/",
+    baseURL: process.env.NEXTAUTH_URL,
   });
 
-  useEffect(() => {
-    const source = axios.CancelToken.source();
-
-    // axiosInstance.interceptors.request.use(
-    //   (config) => {
-    //     if (token) {
-    //       config.headers.Authorization = `Bearer ${token}`;
-    //     }
-    //     return config;
-    //   },
-    //   (error) => {
-    //     return Promise.reject(error);
-    //   },
-    // );
-
-    return () => {
-      source.cancel("Componente desmontado: Requisição cancelada.");
-    };
-  }, []);
-  // }, [token]);
-
-  const fetchData = async ({ url, method, data }: FetchDataOptions) => {
+  const fetchData = async ({ url, method, data, params }: FetchDataOptions) => {
     setLoading(true);
     try {
+      const token = (session as ExtendedSession)?.accessToken;
+      console.log("Using token: ", token);
+
       const result = await axiosInstance({
         url,
         method,
         data: method.toLowerCase() === "get" ? undefined : data,
-        params: method.toLowerCase() === "get" ? data : undefined,
-        cancelToken: axios.CancelToken.source().token,
+        params: method.toLowerCase() === "get" ? data : params,
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
-      return result;
+      return result.data;
     } catch (error) {
-      return error;
+      return Promise.reject(error);
     } finally {
       setLoading(false);
     }

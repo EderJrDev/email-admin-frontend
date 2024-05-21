@@ -7,14 +7,21 @@ import { PropsLead } from "../models/lead.model";
 
 const Table = ({ handleSave }: any) => {
   const { loading, fetchData } = useApi();
-  const { data: leads = [] } = useQuery<PropsLead[], Error>({
+  const { data: leads } = useQuery<PropsLead[], Error>({
     queryKey: ["leads"],
     queryFn: async () => {
       const leads = await fetchData({ url: "lead", method: "get" });
       console.log(leads);
-      return leads.data;
+      return leads;
     },
   });
+
+  console.log(leads);
+
+  const leadd = leads?.map((lead, key) => {
+    return lead;
+  });
+  console.log(leadd);
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -44,16 +51,16 @@ const Table = ({ handleSave }: any) => {
               <tr key={key}>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
-                    {lead.id}
+                    {lead._id}
                   </h5>
                   {/* <p className="text-sm">${lead.name}</p> */}
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                  <p className="text-black dark:text-white">{lead.email}</p>
+                  <p className="text-black dark:text-white">{lead.name}</p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <p className="inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium">
-                    {lead.name}
+                    {lead.email}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">

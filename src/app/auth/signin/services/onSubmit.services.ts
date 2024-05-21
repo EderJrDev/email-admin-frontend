@@ -10,8 +10,10 @@ export const createOnSubmitHandler = (
     const result = await signIn("credentials", {
       email,
       password,
+      url: "https://nestjs-backend-livid.vercel.app/api/auth/signin",
       redirect: false,
     });
+    console.log(result);
     if (result?.error) {
       console.log(result);
       return;
