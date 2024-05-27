@@ -1,4 +1,6 @@
+// services/onSubmit.services.ts
 "use client";
+
 import { SubmitHandler } from "react-hook-form";
 import { IFormInput } from "../models/signin.model";
 import { signIn } from "next-auth/react";
@@ -10,12 +12,11 @@ export const createOnSubmitHandler = (
     const result = await signIn("credentials", {
       email,
       password,
-      url: "https://nestjs-backend-livid.vercel.app/api/auth/signin",
       redirect: false,
     });
-    console.log(result);
+
     if (result?.error) {
-      console.log(result);
+      console.error(result.error);
       return;
     }
 

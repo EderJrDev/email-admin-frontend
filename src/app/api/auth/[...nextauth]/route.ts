@@ -1,38 +1,47 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-const nextAuthOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      name: "credentials",
+      name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "text" },
+        email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials, req) {
-        console.log("NEXTAUTH_URL:", process.env.NEXTAUTH_URL);
-        const response = await fetch(`${process.env.NEXTAUTH_URL}/auth/login`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+      async authorize(credentials) {
+        const response = await fetch(
+          "https://nestjs-backend-livid.vercel.app/auth/login",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: credentials?.email,
+              password: credentials?.password,
+            }),
           },
-          body: JSON.stringify({
-            email: credentials?.email,
-            password: credentials?.password,
-          }),
-        });
+        );
 
-        const data = await response.json();
-        console.log(data);
-        if (response.ok && data.token) {
-          return { accessToken: data.token, ...data };
+        const user = await response.json();
+
+        if (response.ok && user.token) {
+          return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            accessToken: user.token,
+          };
         }
+
         return null;
       },
     }),
   ],
   pages: {
-    signIn: "/",
+    signIn: "/auth/signin",
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -49,6 +58,6 @@ const nextAuthOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 };
 
-const handler = NextAuth(nextAuthOptions);
+const handler = NextAuth(authOptions);
 
-export { handler as GET, handler as POST, nextAuthOptions };
+export { handler as GET, handler as POST };
