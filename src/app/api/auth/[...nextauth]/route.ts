@@ -11,32 +11,45 @@ const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const response = await fetch(
-          "https://nestjs-backend-livid.vercel.app/auth/login",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
+        try {
+          const response = await fetch(
+            "https://nestjs-backend-livid.vercel.app/auth/login",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                email: credentials?.email,
+                password: credentials?.password,
+              }),
             },
-            body: JSON.stringify({
-              email: credentials?.email,
-              password: credentials?.password,
-            }),
-          },
-        );
+          );
 
-        const user = await response.json();
+          if (!response.ok) {
+            throw new Error("Falha na autenticação");
+          }
 
-        if (response.ok && user.token) {
-          return {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            accessToken: user.token,
-          };
+          const user = await response.json();
+
+          var jwt = require("jsonwebtoken");
+
+          const decode = jwt.decode(user.token);
+
+          if (decode) {
+            return {
+              id: decode.id,
+              name: decode.name,
+              email: decode.email,
+              accessToken: user.token,
+            };
+          } else {
+            throw new Error("Token não fornecido");
+          }
+        } catch (error) {
+          console.error("Erro na autorização", error);
+          return null;
         }
-
-        return null;
       },
     }),
   ],
