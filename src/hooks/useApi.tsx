@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 
-interface FetchDataOptions {
+export interface FetchDataOptions {
   url: string;
   method: "get" | "post" | "put" | "delete" | "patch";
   data?: any;
@@ -24,7 +24,7 @@ export function useApi(): UseApiResponse {
   console.log(session);
 
   const axiosInstance = axios.create({
-    baseURL: process.env.NEXTAUTH_URL,
+    baseURL: "https://nestjs-backend-livid.vercel.app",
   });
 
   const fetchData = async ({ url, method, data, params }: FetchDataOptions) => {

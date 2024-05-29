@@ -18,10 +18,10 @@ const Table = ({ handleSave }: any) => {
 
   console.log(leads);
 
-  const leadd = leads?.map((lead, key) => {
-    return lead;
-  });
-  console.log(leadd);
+  // const leadd = leads?.map((lead, key) => {
+  //   return lead;
+  // });
+  // console.log(leadd);
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
