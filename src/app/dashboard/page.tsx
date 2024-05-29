@@ -8,7 +8,7 @@ export default function Dashboard() {
     <>
       <DefaultLayout>
         <Breadcrumb pageName="Clientes cadastrados" />
-        <ECommerce />
+        {/* <ECommerce /> */}
       </DefaultLayout>
     </>
   );
