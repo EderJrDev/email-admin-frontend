@@ -20,6 +20,6 @@ export const createOnSubmitHandler = (
       return;
     }
 
-    replace("/dashboard");
+    replace("/leads");
   };
 };

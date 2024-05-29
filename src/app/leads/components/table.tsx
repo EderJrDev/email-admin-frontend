@@ -41,12 +41,19 @@ const Table = ({ handleSave }: any) => {
               <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
                 Telefone
               </th>
-              <th className="px-4 py-4 font-medium text-black dark:text-white">
+              {/* <th className="px-4 py-4 font-medium text-black dark:text-white">
                 Ações
-              </th>
+              </th> */}
             </tr>
           </thead>
           <tbody>
+            {leads?.length <= 0 && (
+              <>
+                <div className="py-2 font-semibold">
+                  <span>Nenhuma informação encontrada.</span>
+                </div>
+              </>
+            )}
             {leads?.map((lead, key) => (
               <tr key={key}>
                 <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
@@ -68,9 +75,9 @@ const Table = ({ handleSave }: any) => {
                     {lead.phone}
                   </p>
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                {/* <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                   <div className="flex items-center space-x-3.5">
-                    <Modal
+                    {/* <Modal
                       triggerText="Editar"
                       title="Editar"
                       description="Faça a edição do usuário."
@@ -94,9 +101,9 @@ const Table = ({ handleSave }: any) => {
                           placeholder="Enter your email"
                         />
                       </label>
-                    </Modal>
+                    </Modal> */}
 
-                    {/* <button className="hover:text-primary">
+                {/* <button className="hover:text-primary">
                       <svg
                         className="fill-current"
                         width="18"
@@ -116,7 +123,7 @@ const Table = ({ handleSave }: any) => {
                       </svg>
                     </button> */}
 
-                    {/* <button className="hover:text-primary">
+                {/* <button className="hover:text-primary">
                       <svg
                         className="fill-current"
                         width="18"
@@ -162,9 +169,9 @@ const Table = ({ handleSave }: any) => {
                           fill=""
                         />
                       </svg>
-                    </button> */}
+                    </button> 
                   </div>
-                </td>
+                </td> */}
               </tr>
             ))}
           </tbody>

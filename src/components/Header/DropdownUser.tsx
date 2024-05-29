@@ -1,12 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
+var jwt = require("jsonwebtoken");
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
+
+  const { data: session } = useSession();
+  console.log(session);
+
+  const decode = jwt.decode(session?.accessToken);
+
+  console.log(decode);
 
   // close on click outside
   useEffect(() => {
@@ -44,16 +53,16 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
+            {decode?.name}
           </span>
-          <span className="block text-xs">UX Designer</span>
+          <span className="block text-xs">Email-Admin</span>
         </span>
 
         <span className="h-12 w-12 rounded-full">
           <Image
             width={112}
             height={112}
-            src={"/images/user/user-01.png"}
+            src="/images/user/user-01.png"
             style={{
               width: "auto",
               height: "auto",
@@ -91,7 +100,7 @@ const DropdownUser = () => {
         <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark">
           <li>
             <Link
-              href="/profile"
+              href="/"
               className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
             >
               <svg
@@ -111,7 +120,7 @@ const DropdownUser = () => {
                   fill=""
                 />
               </svg>
-              My Profile
+              Meu perfil
             </Link>
           </li>
           <li>
@@ -132,12 +141,12 @@ const DropdownUser = () => {
                   fill=""
                 />
               </svg>
-              My Contacts
+              Contatos
             </Link>
           </li>
           <li>
             <Link
-              href="/settings"
+              href="/"
               className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
             >
               <svg
@@ -157,11 +166,14 @@ const DropdownUser = () => {
                   fill=""
                 />
               </svg>
-              Account Settings
+             Configurações
             </Link>
           </li>
         </ul>
-        <Link href="/" className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        <Link
+          href="/"
+          className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+        >
           <svg
             className="fill-current"
             width="22"
@@ -179,7 +191,7 @@ const DropdownUser = () => {
               fill=""
             />
           </svg>
-          Log Out
+          Sair
         </Link>
       </div>
       {/* <!-- Dropdown End --> */}
