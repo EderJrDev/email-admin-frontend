@@ -1,5 +1,7 @@
+import axios from "axios";
 import NextAuth from "next-auth";
 import { NextAuthOptions } from "next-auth";
+import { decode } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 const authOptions: NextAuthOptions = {
@@ -12,36 +14,51 @@ const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         try {
-          const response = await fetch(
+          // const response = await fetch(
+          //   "https://nestjs-backend-livid.vercel.app/auth/login",
+          //   {
+          //     method: "POST",
+          //     headers: {
+          //       "Content-Type": "application/json",
+          //     },
+          //     body: JSON.stringify({
+          //       email: credentials?.email,
+          //       password: credentials?.password,
+          //     }),
+          //   },
+          // );
+
+          const response = await axios.post(
             "https://nestjs-backend-livid.vercel.app/auth/login",
             {
-              method: "POST",
+              email: credentials?.email,
+              password: credentials?.password,
+            },
+            {
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({
-                email: credentials?.email,
-                password: credentials?.password,
-              }),
             },
           );
 
-          if (!response.ok) {
+          if (!response.data) {
             throw new Error("Falha na autenticação");
           }
 
-          const user = await response.json();
+          // const user = await response);
 
           var jwt = require("jsonwebtoken");
 
-          const decode = jwt.decode(user.token);
+          const decode = jwt.decode(response.data.token);
+
+          console.log(decode);
 
           if (decode) {
             return {
               id: decode.id,
               name: decode.name,
               email: decode.email,
-              accessToken: user.token,
+              accessToken: response.data.token,
             };
           } else {
             throw new Error("Token não fornecido");
