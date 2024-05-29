@@ -1,13 +1,11 @@
 "use client";
-import Modal from "@/components/Modal/modal";
 import { useApi } from "@/hooks/useApi";
-import { Text, TextField } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
 import { PropsLead } from "../models/lead.model";
 
 const Table = ({ handleSave }: any) => {
   const { loading, fetchData } = useApi();
-  const { data: leads } = useQuery<PropsLead[], Error>({
+  const { data: leads = [] } = useQuery<PropsLead[], Error>({
     queryKey: ["leads"],
     queryFn: async () => {
       const leads = await fetchData({ url: "lead", method: "get" });
