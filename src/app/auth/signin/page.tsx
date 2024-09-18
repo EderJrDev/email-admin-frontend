@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import Link from "next/link";
@@ -11,9 +11,10 @@ import { createOnSubmitHandler } from "./services/onSubmit.services";
 
 const SignIn: React.FC = () => {
   const { register, handleSubmit } = useForm<IFormInput>();
+  const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
 
-  const onSubmit = createOnSubmitHandler(router.replace);
+  const onSubmit = createOnSubmitHandler(router.replace, setLoading);
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="flex flex-wrap items-center">
@@ -249,7 +250,7 @@ const SignIn: React.FC = () => {
                   // href="/dashboard"
                   className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-center text-white transition hover:bg-opacity-90"
                 >
-                  Sign In
+                  {loading ? "Carregando..." : "Sign In"}
                 </button>
               </div>
 
